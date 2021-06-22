@@ -24,7 +24,7 @@ module Users
             render json: { error: I18n.t("devise.registrations.signed_up_but_inactive") }, status: :locked and return
           end
         else
-          render json: { error: user.errors.full_messages.join(" ") }, status: :unprocessable_entity and return
+          render json: user.errors.full_messages.join(" "), status: :unprocessable_entity and return
         end
       end
     end

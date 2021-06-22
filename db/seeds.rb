@@ -8,6 +8,6 @@
 
 # AdminUser.create!(email: "admin@example.com", password: "password", password_confirmation: "password") if Rails.env.development?
 
-[Category, Item].each do |cls|
+[User, Category, Item].each do |cls|
   GenerateSeed.exec(cls)
 end
