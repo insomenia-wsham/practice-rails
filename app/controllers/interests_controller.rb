@@ -1,7 +1,7 @@
 class InterestsController < ApiController
 
   def index
-		interests = Interest.where(user_id: params[:user_id])
+		interests = current_api_user.interests
     render json: {
       interests: each_serialize(interests),
       total_count: interests.count

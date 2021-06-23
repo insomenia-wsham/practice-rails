@@ -30,14 +30,11 @@ Rails.application.routes.draw do
     post :dropzone, on: :collection
   end
 
-  resources :users do
-    resources :interests
-  end
-  resources :users do
-    resources :carts
-  end
-  resources :users do
-    resources :orders
+  resources :carts
+  resources :interests
+  resources :orders
+  resources :items do
+    resources :reviews
   end
 
   resources :users
