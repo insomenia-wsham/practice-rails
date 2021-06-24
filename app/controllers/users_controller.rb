@@ -15,7 +15,4 @@ class UsersController < ApiController
 		render json: serialize(user)
 	end
 
-	def destroy
-	end
-
 end
