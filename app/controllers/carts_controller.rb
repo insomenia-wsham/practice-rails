@@ -1,43 +1,51 @@
 class CartsController < ApiController
+  before_action :load_cart, only: [:destroy]
 
   def index
-		carts = current_api_user.carts
+    carts = current_api_user.carts.order(:created_at)
+
     render json: {
       carts: each_serialize(carts),
       total_count: carts.count,
     }
   end
 
-	def create
-		itemCart = current_api_user.carts.where(item_id: params['cart']['item_id'])
-		if itemCart.count > 0
-			message = '이미 장바구니에 담겨있는 상품입니다.'
-		else
-			message = '장바구니에 성공적으로 담겼습니다.'
-			Cart.create(params.require(:cart).permit(:user_id, :item_id, :item_count))
-		end
-		render json: {
-			code: 0,
-			message: message
-		}
-	end
+  def create
 
-	def update
-		current_api_user.carts.where(id: params['cart']['id']).update(params.require(:cart).permit(:item_count))
+    cart = current_api_user.carts.find_or_initialize_by(item_id: cart_params[:item_id])
 
-		render json: {
-			code: 0,
-			message: '성공적으로 수정하였습니다.'
-		}
-	end
+    if cart.new_record?
+      cart.item_count = cart_params[:item_count]
+      cart.save()
+      success = true
+    end
+    
+    render json: {
+      success: success
+    }
+  end
 
-	def destroy
-		current_api_user.carts.destroy(params[:id])
+  def update
+    cart = current_api_user.carts.find(params[:id])
+    load_cart.update(item_count: cart_params[:item_count])
 
-		render json: {
-			code: 0,
-			message: '성공적으로 삭제하였습니다.'
-		}
-	end
+    render json: serialize(cart)
+  end
 
+  def destroy
+    cart = load_cart.destroy()
+
+    render json: serialize(cart)
+  end
+
+  private
+
+  def cart_params
+    params.require(:cart).permit(:item_id, :item_count)
+  end
+
+  def load_cart
+    current_api_user.carts.find(params[:id])
+  end
 end
+

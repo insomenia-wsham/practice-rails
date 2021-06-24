@@ -24,7 +24,7 @@ Rails.application.routes.draw do
                registrations: "users/registrations"
              }
 
-  resources :categories, only: [:index, :create]
+  resources :categories, only: [:index, :create, :show]
   resources :items, only: [:index, :show]
   resources :images do
     post :dropzone, on: :collection
