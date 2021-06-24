@@ -24,19 +24,19 @@ Rails.application.routes.draw do
                registrations: "users/registrations"
              }
 
-  resources :categories
-  resources :items
+  resources :categories, only: [:index, :create]
+  resources :items, only: [:index, :show]
   resources :images do
     post :dropzone, on: :collection
   end
 
   resources :carts
-  resources :interests
-  resources :orders
+  resources :interests, except: :update
+  resources :orders, only: [:index, :create]
   resources :items do
-    resources :reviews
+    resources :reviews, except: :update
   end
 
-  resources :users
+  resources :users, only: :update
   
 end
