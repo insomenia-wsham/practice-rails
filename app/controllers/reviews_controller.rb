@@ -1,6 +1,6 @@
 class ReviewsController < ApiController
   def index
-    reviews = Review.where(item_id: params[:item_id])
+    reviews = Review.where(item_id: params[:item_id]).order(created_at: :desc)
     render json: {
       reviews: each_serialize(reviews),
       total_count: reviews.count,
@@ -8,10 +8,16 @@ class ReviewsController < ApiController
   end
 
   def create
-    Review.create(user_id: current_api_user.id, item_id: params[:item_id], content: review_params[:content])
-    render json: {
-      message: '성공적으로 댓글을 등록하였습니다.'
-    }
+    review = Review.create(user_id: current_api_user.id, item_id: params[:item_id], content: review_params[:content])
+    render json: serialize(review)
+  end
+
+  def destroy
+    # debug
+    review = Review.find(params[:id])
+    review.destroy()
+
+    render json: serialize(review)
   end
 
   private
