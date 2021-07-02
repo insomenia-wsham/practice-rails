@@ -1,9 +1,9 @@
 class ItemsController < ApiController
   def index
-    items = item_result.limit(params[:limit]).offset(params[:offset])
+    items = item_result
     render json: {
-      items: each_serialize(items),
-      total_count: item_result.count
+      items: each_serialize(items.limit(params[:limit]).offset(params[:offset])),
+      total_count: items.size
     }
   end
 
@@ -15,7 +15,7 @@ class ItemsController < ApiController
   private
 
   def index_params
-    params.fetch(:q, {}).permit(:s, :category_id_eq)
+    params.fetch(:q, {}).permit(:s, :category_id_eq, :name_cont)
   end
 
   def item_result
