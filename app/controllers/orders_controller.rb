@@ -11,9 +11,7 @@ class OrdersController < ApiController
     if !params.dig(:order, :direct)
       current_api_user.carts.destroy_all
     end
-    render json: {
-      message: '성공적으로 주문하였습니다.',
-    }
+    render json: new_order
   end
 
   private
