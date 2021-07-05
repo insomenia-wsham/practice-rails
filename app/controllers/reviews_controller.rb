@@ -13,7 +13,6 @@ class ReviewsController < ApiController
   end
 
   def destroy
-    # debug
     review = Review.find(params[:id])
     review.destroy()
 
